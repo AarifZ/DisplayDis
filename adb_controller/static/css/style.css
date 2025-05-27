@@ -1,0 +1,251 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap');
+
+body {
+    font-family: 'Roboto Mono', monospace;
+    background-color: #1a1a2e; /* Dark blue-purple */
+    color: #e0e0e0; /* Light gray */
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+.container {
+    background-color: #16213e; /* Slightly lighter dark blue-purple */
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    width: 90%;
+    max-width: 800px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+h1 {
+    color: #0f3460; /* Medium blue */
+    text-align: center;
+    margin-bottom: 25px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.mode-selection, .controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+
+button {
+    background-color: #0f3460; /* Medium blue */
+    color: #e0e0e0;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 1rem;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    flex-grow: 1; /* Allow buttons to grow */
+    min-width: 120px; /* Minimum width for buttons */
+}
+
+button:hover {
+    background-color: #533483; /* Purple */
+    transform: translateY(-2px);
+}
+
+button:active {
+    background-color: #e94560; /* Reddish */
+    transform: translateY(0);
+}
+
+button.active {
+    background-color: #e94560; /* Active mode button */
+    border: 2px solid #e0e0e0;
+}
+
+button.disabled {
+    background-color: #3e275f; /* A darker purple, indicating disabled */
+    cursor: not-allowed;
+    opacity: 0.7;
+    transform: none; /* No hover/active effects */
+}
+
+.status-message, .error-message, .success-message {
+    padding: 10px;
+    border-radius: 8px;
+    margin-top: 10px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.status-message {
+    background-color: #0f3460; /* Blue for general status */
+    color: #e0e0e0;
+}
+
+.error-message {
+    background-color: #e94560; /* Red for errors */
+    color: #fff;
+}
+
+.success-message {
+    background-color: #1abc9c; /* Green for success */
+    color: #fff;
+}
+
+/* Wireless Connect Section */
+.wireless-connect-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 15px;
+    padding: 15px;
+    background-color: #0f3460;
+    border-radius: 8px;
+    border: 1px solid #533483;
+}
+
+.wireless-connect-section input[type="text"] {
+    background-color: #1a1a2e;
+    border: 1px solid #533483;
+    padding: 10px 15px;
+    border-radius: 8px;
+    color: #e0e0e0;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 1rem;
+    flex-grow: 1;
+    min-width: 200px; /* Ensure input field is wide enough */
+}
+
+.wireless-connect-section input[type="text"]::placeholder {
+    color: #a0a0a0;
+}
+
+.wireless-connect-section button {
+    flex-grow: 0; /* Don't grow aggressively */
+    min-width: 150px;
+}
+
+#wirelessConnectStatus {
+    flex-basis: 100%; /* Make status message take full width */
+    text-align: center;
+    font-size: 0.9em;
+}
+
+/* Initially hide the wireless connection section if USB mode is active */
+.hidden {
+    display: none !important; /* Force hide */
+}
+
+
+.device-list-container {
+    background-color: #0f3460; /* Slightly lighter for list background */
+    padding: 15px;
+    border-radius: 8px;
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #533483;
+}
+
+.device-list-container p {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #e0e0e0;
+}
+
+#deviceList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#deviceList li {
+    background-color: #1a1a2e; /* Darker for list item */
+    padding: 10px 15px;
+    margin-bottom: 8px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: background-color 0.2s ease;
+}
+
+#deviceList li.selected {
+    background-color: #533483; /* Highlight selected */
+    border: 1px solid #e94560;
+}
+
+#deviceList li:last-child {
+    margin-bottom: 0;
+}
+
+#deviceList li span {
+    flex-grow: 1;
+    word-break: break-all; /* Ensure long identifiers wrap */
+}
+
+#deviceList li .device-type {
+    font-size: 0.8em;
+    color: #a0a0a0;
+    margin-left: 10px;
+    background-color: #0f3460;
+    padding: 3px 8px;
+    border-radius: 4px;
+}
+
+#deviceList li input[type="checkbox"] {
+    margin-right: 10px;
+    transform: scale(1.3); /* Make checkbox larger */
+    accent-color: #e94560; /* Highlight checkbox color */
+}
+
+.output-log {
+    background-color: #0c0c1b; /* Even darker for log background */
+    padding: 15px;
+    border-radius: 8px;
+    max-height: 250px;
+    overflow-y: auto;
+    border: 1px solid #0f3460;
+}
+
+.output-log p {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #e0e0e0;
+}
+
+#outputLog {
+    white-space: pre-wrap; /* Preserve whitespace and wrap long lines */
+    word-wrap: break-word; /* Break words if necessary */
+    margin: 0;
+    color: #1abc9c; /* Greenish for output */
+    font-size: 0.9em;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .container {
+        padding: 20px;
+        width: 100%;
+        border-radius: 0;
+    }
+
+    button {
+        padding: 10px 15px;
+        font-size: 0.9rem;
+        flex-grow: 1;
+    }
+
+    .mode-selection, .controls, .wireless-connect-section {
+        flex-direction: column;
+    }
+}
