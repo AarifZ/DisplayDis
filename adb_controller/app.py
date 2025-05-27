@@ -147,36 +147,50 @@ def push_dex():
     return jsonify({"success": True, "message": f"DisplayToggle.dex pushed and permissions set for {identifier}"})
 
 @app.route('/toggle_display', methods=['POST'])
+@app.route('/toggle_display', methods=['POST'])
 def toggle_display():
     identifiers = request.json.get('identifiers')
-    state = request.json.get('state') # '0' for off, '1' for on, '2' for on (reliable)
+    state = request.json.get('state')  # '0' for off, '1' for on, '2' for on (reliable)
     results = []
 
     adb_path = find_adb_path()
     if not adb_path:
         return jsonify({"success": False, "error": "ADB executable not found. Please ensure it's in your system PATH or set the ADB_PATH environment variable."})
 
-
     for identifier in identifiers:
         # Check if DEX needs to be pushed
         if identifier in CONNECTED_DEVICES and not CONNECTED_DEVICES[identifier]['dex_pushed']:
-            push_res = push_dex_sync(identifier) # Synchronous push
+            push_res = push_dex_sync(identifier)  # Synchronous push
             if not push_res['success']:
                 results.append({"identifier": identifier, "success": False, "error": f"Failed to push DEX: {push_res['error']}"})
                 continue
 
         # Removed quotes around DEX_REMOTE_PATH as per debugging
         command = f'"{adb_path}" -s {identifier} shell CLASSPATH={DEX_REMOTE_PATH} app_process / DisplayToggle {state}'
-        print(f"DEBUG: Executing command: {command}") # Keep this for debugging
+        print(f"DEBUG: Executing command: {command}")  # Keep this for debugging
         stdout, stderr = run_command(command, check_adb=False)
 
+        result = {"identifier": identifier}
+
         if stderr:
-            results.append({"identifier": identifier, "success": False, "error": stderr})
+            result.update({"success": False, "error": stderr})
         else:
-            results.append({"identifier": identifier, "success": True, "output": stdout})
+            result.update({"success": True, "output": stdout})
+
+            # If turning on display, also set brightness
+            if state in ['1', '2']:
+                brightness_cmd = f'"{adb_path}" -s {identifier} shell settings put system screen_brightness 100'
+                print(f"DEBUG: Executing brightness command: {brightness_cmd}")
+                b_out, b_err = run_command(brightness_cmd, check_adb=False)
+                if b_err:
+                    result.update({"brightness_success": False, "brightness_error": b_err})
+                else:
+                    result.update({"brightness_success": True, "brightness_output": b_out})
+
+        results.append(result)
 
     return jsonify({"success": True, "results": results})
-
+    
 def push_dex_sync(identifier):
     """Synchronous helper for pushing DEX, used internally."""
     adb_path = find_adb_path()
